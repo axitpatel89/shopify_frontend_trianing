@@ -2,19 +2,14 @@
 <html>
   <head>
     <title>Registration Form</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
     <div class="main-container">
       <h1>Registration Form</h1>
       <form>
         <label for="first-name">First Name:</label>
-        <input
-          type="text"
-          id="first-name"
-          name="first-name"
-          required
-        /><br /><br />
+        <input type="text" id="first-name" name="first-name" required /><br />
 
         <label for="size">Size:</label>
         <select id="size" name="size">
@@ -23,25 +18,45 @@
           <option value="l">L</option>
           <option value="xl">XL</option>
           <option value="xxl">XXL</option></select
-        ><br /><br />
-
-        <label for="activities">Activities:</label><br />
-        <input
-          type="checkbox"
-          id="traveling"
-          name="activities"
-          value="traveling"
-        />
-        <label for="traveling">Traveling</label><br />
-        <input type="checkbox" id="dancing" name="activities" value="dancing" />
-        <label for="dancing">Dancing</label><br />
-        <input type="checkbox" id="singing" name="activities" value="singing" />
-        <label for="singing">Singing</label><br /><br />
-
+        ><br />
+        <div class="check-box-outer-container">
+          <label for="activities">Hobbies:</label>
+          <div class="check-box-inner-container">
+            <div class="check-box-container">
+              <input
+                type="checkbox"
+                id="traveling"
+                name="activities"
+                value="traveling"
+              />
+              <label for="traveling">Traveling</label>
+            </div>
+            <div class="check-box-container">
+              <input
+                type="checkbox"
+                id="dancing"
+                name="activities"
+                value="dancing"
+              />
+              <label for="dancing">Dancing</label>
+            </div>
+            <div class="check-box-container">
+              <input
+                type="checkbox"
+                id="singing"
+                name="activities"
+                value="singing"
+              />
+              <label for="singing">Singing</label>
+            </div>
+          </div>
+        </div>
         <input type="submit" class="submit-btn" value="Submit" />
       </form>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="custom.js"></script>
+
+    <div class="result-record-container"></div>
   </body>
 </html>
