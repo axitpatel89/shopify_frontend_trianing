@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Employee Records</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div
+        id="successAlert"
+        class="alert alert-success"
+        role="alert"
+        style="display: none"
+      >
+        Error message placeholder
+      </div>
+      <div
+        id="errorAlert"
+        class="alert alert-danger"
+        role="alert"
+        style="display: none"
+      >
+        Error message placeholder
+      </div>
+      <h2>Add Employee Record</h2>
+      <form id="addEmployeeForm">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="employee_name"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="salary">Salary:</label>
+          <input
+            type="text"
+            id="salary"
+            name="employee_salary"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="age">Age:</label>
+          <input
+            type="text"
+            id="age"
+            name="employee_age"
+            class="form-control"
+            required
+          />
+        </div>
+        <input type="submit" value="Add" class="btn btn-primary" />
+      </form>
+      <div class="mt-5">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <h2>Employee Records</h2>
+          </div>
+          <div class="col-md-6 d-flex justify-content-end">
+            <button id="get-new-record" class="btn btn-primary">
+              Get updated Records
+            </button>
+          </div>
+        </div>
+        <table id="employeeTable" class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Salary</th>
+              <th>Age</th>
+            </tr>
+          </thead>
+          <tbody class="tBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      var emp_record;
+      $("#addEmployeeForm").submit(function (event) {
+        event.preventDefault();
+
+        var newFormData = {
+          employee_name: $("#name").val(),
+          employee_salary: $("#salary").val(),
+          employee_age: $("#age").val(),
+        };
+        $.ajax({
+          url: "https://dummy.restapiexample.com/api/v1/create",
+          method: "POST",
+          data: JSON.stringify(newFormData),
+          contentType: "application/json",
+          success: function (response) {
+            const successAlert = document.getElementById("successAlert");
+            successAlert.textContent = response.message;
+            successAlert.style.display = "block";
+
+            setTimeout(() => {
+              successAlert.style.display = "none";
+            }, 2000);
+
+            var new_record = response.data;
+
+            emp_record +=
+              '<tr> <th scope="row">' +
+              response.data.id +
+              "</th> <td>" +
+              response.data.employee_name +
+              "</td> <td>" +
+              response.data.employee_salary +
+              "</td> <td>" +
+              response.data.employee_age +
+              "</td> </tr>";
+
+            jQuery(".tBody").html(emp_record);
+          },
+          error: function () {
+            const errorAlert = document.getElementById("errorAlert");
+            errorAlert.textContent = "Too Many Request!";
+            errorAlert.style.display = "block";
+            setTimeout(() => {
+              errorAlert.style.display = "none";
+            }, 2000);
+          },
+        });
+      });
+
+      $("#get-new-record").on("click", function () {
+        $.ajax({
+          url: "https://dummy.restapiexample.com/api/v1/employees",
+          method: "GET",
+          dataType: "json",
+
+          success: function (response) {
+            const successAlert = document.getElementById("successAlert");
+            successAlert.textContent = response.message;
+            successAlert.style.display = "block";
+
+            setTimeout(() => {
+              successAlert.style.display = "none";
+            }, 2000);
+            jQuery.each(response.data, function (key, value) {
+              emp_record +=
+                '<tr> <th scope="row">' +
+                value.id +
+                "</th> <td>" +
+                value.employee_name +
+                "</td> <td>" +
+                value.employee_salary +
+                "</td> <td>" +
+                value.employee_age +
+                "</td> </tr>";
+            });
+
+            jQuery(".tBody").html(emp_record);
+          },
+
+          error: function (xhr, status, error) {
+            const errorAlert = document.getElementById("errorAlert");
+            errorAlert.textContent = "Too Many Request!";
+            errorAlert.style.display = "block";
+            setTimeout(() => {
+              errorAlert.style.display = "none";
+            }, 2000);
+          },
+        });
+      });
+    </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
